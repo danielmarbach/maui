@@ -1,4 +1,9 @@
 ﻿using System;
+using Microsoft.Maui;
+using Microsoft.Maui.Controls;
+using Microsoft.Maui.Layouts;
+using Microsoft.Maui.Graphics;
+using System.Collections.Generic;
 
 namespace Maui.Controls.Sample.Pages
 {
@@ -7,13 +12,25 @@ namespace Maui.Controls.Sample.Pages
 		public TemplatePage()
 		{
 			InitializeComponent();
-		}
 
-		int count = 0;
-		private void OnCounterClicked(object sender, EventArgs e)
-		{
-			count++;
-			CounterLabel.Text = $"Current count: {count}";
+			var source = new List<String>() {
+
+				"One",
+				//"Two",
+				//"Three",
+				//"Four",
+				//"Five",
+				//"Six" ,
+				//"Seven",
+				//"Eight",
+				//"Nine",
+				//"Ten"
+			};
+
+//			container.ItemsSource = source;
+
 		}
 	}
+
+
 }

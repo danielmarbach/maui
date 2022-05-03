@@ -37,6 +37,8 @@ namespace Microsoft.Maui.Layouts
 			double measuredHeight = 0;
 			double measuredWidth = 0;
 
+			FlexLayout.Layout(widthConstraint, heightConstraint);
+
 			foreach (var child in FlexLayout)
 			{
 				if (child.Visibility == Visibility.Collapsed)
@@ -48,6 +50,10 @@ namespace Microsoft.Maui.Layouts
 				measuredHeight = Math.Max(measuredHeight, frame.Bottom);
 				measuredWidth = Math.Max(measuredWidth, frame.Right);
 			}
+
+			//var frame = FlexLayout.GetFlexFrame(FlexLayout);
+			//measuredHeight = frame.Height;
+			//measuredWidth = frame.Width;
 
 			var finalHeight = LayoutManager.ResolveConstraints(heightConstraint, FlexLayout.Height, measuredHeight, FlexLayout.MinimumHeight, FlexLayout.MaximumHeight);
 			var finalWidth = LayoutManager.ResolveConstraints(widthConstraint, FlexLayout.Width, measuredWidth, FlexLayout.MinimumWidth, FlexLayout.MaximumWidth);

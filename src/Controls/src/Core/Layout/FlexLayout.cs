@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using Microsoft.Maui.Controls.Internals;
+using Microsoft.Maui.Graphics;
 using Microsoft.Maui.Layouts;
 using Flex = Microsoft.Maui.Layouts.Flex;
 
@@ -599,6 +600,52 @@ namespace Microsoft.Maui.Controls
 			base.OnClear();
 			ClearLayout();
 			PopulateLayout();
+		}
+
+		protected override Size MeasureOverride(double widthConstraint, double heightConstraint)
+		{
+			if (NeedsHackMode(widthConstraint, heightConstraint))
+			{
+				ActivateHackMode();
+			}
+
+			var result =  base.MeasureOverride(widthConstraint, heightConstraint);
+			
+			if (NeedsHackMode(widthConstraint, heightConstraint))
+			{
+				DeactivateHackMode();
+			}
+
+			return result;
+		}
+
+		static bool NeedsHackMode(double widthConstraint, double heightConstraint) 
+		{
+			return double.IsInfinity(widthConstraint) || double.IsInfinity(heightConstraint);
+		}
+
+		void ActivateHackMode() 
+		{
+			foreach (var child in Children)
+			{
+				if (GetFlexItem(child) is Flex.Item item)
+				{
+					item.Shrink = 0;
+					item.AlignSelf = Flex.AlignSelf.Start;
+				}
+			}
+		}
+
+		void DeactivateHackMode() 
+		{
+			foreach (var child in Children)
+			{
+				if (child is BindableObject bo && GetFlexItem(child) is Flex.Item item)
+				{
+					item.Shrink = (float)bo.GetValue(ShrinkProperty);
+					item.AlignSelf = (Flex.AlignSelf)(FlexAlignSelf)bo.GetValue(AlignSelfProperty);
+				}
+			}
 		}
 	}
 }
